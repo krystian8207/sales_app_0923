@@ -1,0 +1,32 @@
+on:
+  push:
+    branches: ["dev"]
+env:
+  IMAGE_VERSION: 1.1
+name: Publishing app
+jobs:
+  build-and-deploy-to-dev:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Building App
+        run: docker build -f Dockerfile_app -t krystian8207/sales_app:release-$IMAGE_VERSION .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Publishing Image
+        run: docker push krystian8207/sales_app:release-$IMAGE_VERSION
+      - name: Running App on Server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ vars.HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script_stop: true
+          script: |
+            docker stop sales_app 2> /dev/null || true
+            docker rm sales_app 2> /dev/null || true
+            docker run -d -p 9000:8888 --name sales_app krystian8207/sales_app_build:${{ vars.IMAGE_TAG }}
