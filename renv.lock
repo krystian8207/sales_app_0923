@@ -4,7 +4,7 @@
     "Repositories": [
       {
         "Name": "CRAN",
-        "URL": "https://packagemanager.posit.co/cran/2022-06-22"
+        "URL": "https://cran.r-project.org"
       }
     ]
   },
