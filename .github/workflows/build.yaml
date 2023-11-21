@@ -29,4 +29,4 @@ jobs:
           script: |
             docker stop sales_app 2> /dev/null || true
             docker rm sales_app 2> /dev/null || true
-            docker run -d -p 9000:8888 --name sales_app krystian8207/sales_app_build:${{ vars.IMAGE_TAG }}
+            docker run -d -p 9000:8888 --name sales_app krystian8207/sales_app:release-$IMAGE_VERSION
