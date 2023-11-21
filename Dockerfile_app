@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN useradd -ms /bin/bash devel
 
-RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cran.r-project.org/'))"
-RUN R -e "remotes::install_version('renv', version = '0.17.0')"
+RUN R -e "install.packages('remotes', repos = 'https://cran.r-project.org/')"
+RUN R -e "remotes::install_version('renv', version = '0.17.0', repos = 'https://cran.r-project.org/')"
 
 RUN mkdir /renv
 RUN chown -R devel:devel /renv
